@@ -1,0 +1,38 @@
+default:
+  image: node:16
+  tags:
+    - basic
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - node_modules
+      - .yarn/cache
+
+stages:
+  - build
+  - deploy
+
+.yarn-build: &yarn-build
+  - yarn config set cacheFolder .yarn/cache
+  - yarn install --immutable
+  - yarn build
+
+build:
+  stage: build
+  script:
+  - *yarn-build
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+
+pages:
+  stage: deploy
+  script:
+  - *yarn-build
+  - mv ./build ./public
+  artifacts:
+    paths:
+    - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
