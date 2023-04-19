@@ -43,7 +43,7 @@ module.exports = {
             },
             {
               label: 'Repository',
-              href: 'https://github.com/Lisalexandr',
+              href: 'https://github.com/Lisalexandr/documentation',
             },
           ],
         },
